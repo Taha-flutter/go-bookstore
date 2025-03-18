@@ -7,7 +7,7 @@ import (
 )
 
 // ParseBody reads the body of the request and unmarshals it into the provided interface.
-func ParseBody(r *http.Request, x interface{}) error {
+func ParseBody(r *http.Request, x any) error {
 	// Read the entire body from the request
 	body, err := io.ReadAll(r.Body)
 	if err != nil {
@@ -23,4 +23,18 @@ func ParseBody(r *http.Request, x interface{}) error {
 
 	// If everything is successful, return nil
 	return nil
+}
+
+func ErrorResponse(w http.ResponseWriter, statuscode int, message string) {
+
+	w.Header().Set("Content-Type", "application/json")
+
+	w.WriteHeader(statuscode)
+
+	errorResponse := map[string]string{"error": message}
+
+	res, _ := json.Marshal(errorResponse)
+
+	w.Write(res)
+
 }

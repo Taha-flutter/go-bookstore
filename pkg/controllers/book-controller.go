@@ -30,7 +30,11 @@ func GetBookById(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("Error while parsing")
 
 	}
-	bookdetails, _ := models.GetBookById(ID)
+	bookdetails, _, err := models.GetBookById(ID)
+	if err != nil {
+		fmt.Println("Error while parsing")
+
+	}
 	res, _ := json.Marshal(bookdetails)
 	w.Header().Set("Content-Type", "pkglication/json")
 	w.WriteHeader(http.StatusOK)
@@ -54,12 +58,22 @@ func DeleteBook(w http.ResponseWriter, r *http.Request) {
 
 	ID, err := strconv.ParseInt(bookId, 0, 0)
 	if err != nil {
-		fmt.Println("Error while parsing", err)
+		// fmt.Println("Error while parsing", err)
+		utills.ErrorResponse(w, http.StatusInternalServerError, "Error while parsing")
+		return
 	}
-	book := models.DeleteBook(ID)
+	book, err := models.DeleteBook(ID)
+
+	if err != nil {
+		// fmt.Println("Error No book found")
+		utills.ErrorResponse(w, http.StatusInternalServerError, "Error No book found")
+		return
+	}
 	res, err := json.Marshal(book)
 	if err != nil {
-		fmt.Println("Error while parsing")
+		utills.ErrorResponse(w, http.StatusInternalServerError, "There was an error while preparing the response data")
+		return
+
 	}
 	w.Header().Set("Content-Type", "pkglication/json")
 	w.WriteHeader(http.StatusOK)
@@ -76,7 +90,10 @@ func UpdateBook(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		fmt.Println("Error while parsing")
 	}
-	bookdetails, db := models.GetBookById(ID)
+	bookdetails, db, err := models.GetBookById(ID)
+	if err != nil {
+		fmt.Println("Error while parsing")
+	}
 	if updateBook.Name != "" {
 		bookdetails.Name = updateBook.Name
 	}
