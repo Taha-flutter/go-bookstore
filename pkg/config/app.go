@@ -12,9 +12,7 @@ var (
 	db *gorm.DB
 )
 
-// Connect establishes a connection to the MySQL database.
 func Connect() {
-	// Define your MySQL connection string (example: "user:password@tcp(localhost:3306)/dbname")
 	dsn := "root:T@F$0L123456@tcp(localhost:3306)/book_management?charset=utf8mb4&parseTime=True&loc=Local"
 	var err error
 

@@ -2,7 +2,6 @@ package models
 
 import (
 	"github.com/Taha-flutter/go-bookstore/pkg/config"
-	// "github.com/jinzhu/gorm"
 	"gorm.io/gorm"
 )
 
@@ -37,7 +36,6 @@ func GetBookById(Id int64) (*Book, *gorm.DB) {
 	var getBook Book
 	db := db.Where("ID=?", Id).Find(&getBook)
 	return &getBook, db
-
 }
 
 func DeleteBook(Id int64) Book {

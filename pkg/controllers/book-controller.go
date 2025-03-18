@@ -16,7 +16,7 @@ var newbook []models.Book
 func GetBooks(w http.ResponseWriter, r *http.Request) {
 	newbook := models.GetAllBooks()
 	res, _ := json.Marshal(newbook)
-	fmt.Println(newbook)
+	// fmt.Println(newbook)
 	w.Header().Set("Content-Type", "pkglication/json")
 	w.WriteHeader(http.StatusOK)
 	w.Write(res)
@@ -49,10 +49,12 @@ func CreateBook(w http.ResponseWriter, r *http.Request) {
 }
 func DeleteBook(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
-	bookId := vars["bookId"]
+	bookId := vars["id"]
+	fmt.Println(bookId)
+
 	ID, err := strconv.ParseInt(bookId, 0, 0)
 	if err != nil {
-		fmt.Println("Error while parsing")
+		fmt.Println("Error while parsing", err)
 	}
 	book := models.DeleteBook(ID)
 	res, err := json.Marshal(book)
@@ -65,10 +67,11 @@ func DeleteBook(w http.ResponseWriter, r *http.Request) {
 
 }
 func UpdateBook(w http.ResponseWriter, r *http.Request) {
+
 	var updateBook = &models.Book{}
 	utills.ParseBody(r, &updateBook)
 	vars := mux.Vars(r)
-	bookId := vars["bookId"]
+	bookId := vars["id"]
 	ID, err := strconv.ParseInt(bookId, 0, 0)
 	if err != nil {
 		fmt.Println("Error while parsing")
